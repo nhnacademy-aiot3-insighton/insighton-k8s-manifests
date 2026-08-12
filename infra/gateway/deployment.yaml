@@ -20,7 +20,7 @@ spec:
     spec:
       terminationGracePeriodSeconds: 30
       imagePullSecrets:
-        - name: ghcr-secret
+        - name: insighton-ghcr-secrete
       containers:
         - name: api-gateway
           image: ghcr.io/nhnacademy-aiot3-insighton/insighton-test-gateway:8d419351a0b74a0e0fd0decb0aba384cb352755c
