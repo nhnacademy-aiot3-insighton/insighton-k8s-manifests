@@ -28,42 +28,52 @@ spec:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: auth-secrets
+                  name: insighton-auth-secret
                   key: DB_PASSWORD
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: auth-secrets
+                  name: insighton-auth-secret
                   key: REDIS_PASSWORD
             - name: JWT_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
-                  name: auth-secrets
+                  name: insighton-auth-secret
                   key: JWT_PRIVATE_KEY
             - name: JWT_PUBLIC_KEY
               valueFrom:
                 secretKeyRef:
-                  name: auth-secrets
+                  name: insighton-auth-secret
                   key: JWT_PUBLIC_KEY
             - name: GOOGLE_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: auth-secrets
+                  name: insighton-auth-secret
                   key: GOOGLE_CLIENT_ID
             - name: GOOGLE_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: auth-secrets
+                  name: insighton-auth-secret
                   key: GOOGLE_CLIENT_SECRET
+            - name: GITHUB_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-auth-secret
+                  key: GITHUB_CLIENT_ID
+            - name: GITHUB_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-auth-secret
+                  key: GITHUB_CLIENT_SECRET
             - name: BREVO_SMTP_LOGIN
               valueFrom:
                 secretKeyRef:
-                  name: auth-secrets
+                  name: insighton-auth-secret
                   key: BREVO_SMTP_LOGIN
             - name: BREVO_SMTP_KEY
               valueFrom:
                 secretKeyRef:
-                  name: auth-secrets
+                  name: insighton-auth-secret
                   key: BREVO_SMTP_KEY
           readinessProbe:
             httpGet:
