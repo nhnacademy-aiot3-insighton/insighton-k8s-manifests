@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: insighton-influxdb
+  namespace: insighton
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: insighton-influxdb
+  template:
+    metadata:
+      labels:
+        app: insighton-influxdb
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: influxdb
+          image: influxdb:2
+          ports:
+            - containerPort: 8086
+          env:
+            - name: DOCKER_INFLUXDB_INIT_MODE
+              value: "setup"
+            - name: DOCKER_INFLUXDB_INIT_ORG
+              value: "insighton"
+            - name: DOCKER_INFLUXDB_INIT_BUCKET
+              value: "insighton-bucket"
+            - name: DOCKER_INFLUXDB_INIT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-influxdb-secret
+                  key: INIT_USERNAME
+            - name: DOCKER_INFLUXDB_INIT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-influxdb-secret
+                  key: INIT_PASSWORD
+            - name: DOCKER_INFLUXDB_INIT_ADMIN_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-influxdb-secret
+                  key: INFLUXDB_TOKEN
+          volumeMounts:
+            - name: influxdb-data
+              mountPath: /var/lib/influxdb2
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8086
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8086
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "200m"
+              ephemeral-storage: "512Mi"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+              ephemeral-storage: "512Mi"
+      volumes:
+        - name: influxdb-data
+          persistentVolumeClaim:
+            claimName: insighton-influxdb-data

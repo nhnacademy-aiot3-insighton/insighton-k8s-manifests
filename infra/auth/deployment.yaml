@@ -30,6 +30,16 @@ spec:
                 secretKeyRef:
                   name: insighton-auth-secret
                   key: DB_PASSWORD
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-auth-secret
+                  key: DB_HOST
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-auth-secret
+                  key: REDIS_HOST
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
