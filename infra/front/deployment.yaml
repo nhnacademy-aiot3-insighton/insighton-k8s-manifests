@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: insighton-gateway
+  name: insighton-front
   namespace: insighton
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: insighton-gateway
+      app: insighton-front
   template:
     metadata:
       labels:
-        app: insighton-gateway
+        app: insighton-front
     spec:
       automountServiceAccountToken: false
       terminationGracePeriodSeconds: 30
       imagePullSecrets:
         - name: insighton-ghcr-secret
       containers:
-        - name: api-gateway
-          image: ghcr.io/nhnacademy-aiot3-insighton/insighton-gateway:8d419351a0b74a0e0fd0decb0aba384cb352755c
+        - name: front
+          image: ghcr.io/nhnacademy-aiot3-insighton/insighton-front:latest
           ports:
             - containerPort: 8080
           env:

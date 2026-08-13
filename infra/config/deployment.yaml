@@ -1,30 +1,55 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: insighton-gateway
+  name: insighton-config
   namespace: insighton
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: insighton-gateway
+      app: insighton-config
   template:
     metadata:
       labels:
-        app: insighton-gateway
+        app: insighton-config
     spec:
       automountServiceAccountToken: false
       terminationGracePeriodSeconds: 30
       imagePullSecrets:
         - name: insighton-ghcr-secret
       containers:
-        - name: api-gateway
-          image: ghcr.io/nhnacademy-aiot3-insighton/insighton-gateway:8d419351a0b74a0e0fd0decb0aba384cb352755c
+        - name: config
+          image: ghcr.io/nhnacademy-aiot3-insighton/insighton-config:latest
           ports:
             - containerPort: 8080
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "prod"
+            - name: CONFIG_GITHUB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: config-secrets
+                  key: CONFIG_GITHUB_USERNAME
+            - name: CONFIG_GITHUB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: config-secrets
+                  key: CONFIG_GITHUB_TOKEN
+            - name: CONFIG_REPO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: config-secrets
+                  key: CONFIG_REPO_URI
+            - name: CONFIG_SERVER_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: config-secrets
+                  key: CONFIG_SERVER_USERNAME
+            - name: CONFIG_SERVER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: config-secrets
+                  key: CONFIG_SERVER_PASSWORD
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness

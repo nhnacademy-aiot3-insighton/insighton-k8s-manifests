@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: insighton-gateway
+  name: insighton-auth
   namespace: insighton
 spec:
   selector:
-    app: insighton-gateway
+    app: insighton-auth
   ports:
     - protocol: TCP
       port: 80

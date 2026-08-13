@@ -1,30 +1,60 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: insighton-gateway
+  name: insighton-core
   namespace: insighton
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: insighton-gateway
+      app: insighton-core
   template:
     metadata:
       labels:
-        app: insighton-gateway
+        app: insighton-core
     spec:
       automountServiceAccountToken: false
       terminationGracePeriodSeconds: 30
       imagePullSecrets:
         - name: insighton-ghcr-secret
       containers:
-        - name: api-gateway
-          image: ghcr.io/nhnacademy-aiot3-insighton/insighton-gateway:8d419351a0b74a0e0fd0decb0aba384cb352755c
+        - name: core
+          image: ghcr.io/nhnacademy-aiot3-insighton/insighton-core:latest
           ports:
             - containerPort: 8080
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "prod"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: core-secrets
+                  key: DB_PASSWORD
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: core-secrets
+                  key: REDIS_PASSWORD
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: core-secrets
+                  key: RABBITMQ_PASSWORD
+            - name: INFLUXDB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: core-secrets
+                  key: INFLUXDB_TOKEN
+            - name: KMA_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: core-secrets
+                  key: KMA_KEY
+            - name: AIR_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: core-secrets
+                  key: AIR_KEY
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness

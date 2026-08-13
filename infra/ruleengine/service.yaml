@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: insighton-gateway
+  name: insighton-ruleengine
   namespace: insighton
 spec:
   selector:
-    app: insighton-gateway
+    app: insighton-ruleengine
   ports:
     - protocol: TCP
       port: 80
