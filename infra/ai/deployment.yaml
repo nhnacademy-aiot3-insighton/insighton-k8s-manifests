@@ -50,6 +50,11 @@ spec:
                 secretKeyRef:
                   name: insighton-ai-secret
                   key: DB_PASSWORD
+            - name: RABBITMQ_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-ai-secret
+                  key: RABBITMQ_HOST
             - name: RABBITMQ_PASSWORD
               valueFrom:
                 secretKeyRef:
