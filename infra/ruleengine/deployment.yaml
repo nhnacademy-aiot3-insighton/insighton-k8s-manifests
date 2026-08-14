@@ -1,9 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: insighton-ruleengine
   namespace: insighton
 spec:
+  serviceName: insighton-ruleengine-headless
   replicas: 2
   selector:
     matchLabels:
@@ -25,20 +26,35 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "prod"
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-ruleengine-secret
+                  key: DB_HOST
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: ruleengine-secrets
+                  name: insighton-ruleengine-secret
                   key: DB_PASSWORD
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-ruleengine-secret
+                  key: REDIS_HOST
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: ruleengine-secrets
+                  name: insighton-ruleengine-secret
                   key: REDIS_PASSWORD
+            - name: RABBITMQ_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-ruleengine-secret
+                  key: RABBITMQ_HOST
             - name: RABBITMQ_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: ruleengine-secrets
+                  name: insighton-ruleengine-secret
                   key: RABBITMQ_PASSWORD
           readinessProbe:
             httpGet:
