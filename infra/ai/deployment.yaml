@@ -25,30 +25,40 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "prod"
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-ai-secret
+                  key: DB_HOST
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-ai-secret
+                  key: REDIS_HOST
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: ai-secrets
+                  name: insighton-ai-secret
                   key: REDIS_PASSWORD
             - name: GEMINI_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: ai-secrets
+                  name: insighton-ai-secret
                   key: GEMINI_API_KEY
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: ai-secrets
+                  name: insighton-ai-secret
                   key: DB_PASSWORD
             - name: RABBITMQ_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: ai-secrets
+                  name: insighton-ai-secret
                   key: RABBITMQ_PASSWORD
             - name: INFLUXDB_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: ai-secrets
+                  name: insighton-ai-secret
                   key: INFLUXDB_TOKEN
           readinessProbe:
             httpGet:
