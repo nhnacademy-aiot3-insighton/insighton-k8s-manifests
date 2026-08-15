@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: insighton-zipkin-ingress
+  namespace: insighton
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/limit-rps: "10"
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: insighton-team-basic-auth
+    nginx.ingress.kubernetes.io/auth-realm: "InsightOn Team Only"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - insighton.store
+      secretName: insighton-tls
+  rules:
+    - host: insighton.store
+      http:
+        paths:
+          - path: /zipkin
+            pathType: Prefix
+            backend:
+              service:
+                name: insighton-zipkin
+                port:
+                  number: 9411
