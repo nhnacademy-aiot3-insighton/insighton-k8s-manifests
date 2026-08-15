@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: insighton-cloudflared
+  namespace: insighton
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: insighton-cloudflared
+  template:
+    metadata:
+      labels:
+        app: insighton-cloudflared
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: cloudflared
+          image: cloudflare/cloudflared:latest
+          args:
+            - tunnel
+            - --no-autoupdate
+            - run
+          env:
+            - name: TUNNEL_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-cloudflared-secret
+                  key: TUNNEL_TOKEN
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
