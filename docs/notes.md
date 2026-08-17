@@ -114,4 +114,12 @@ k8s Secret은 ConfigMap과 메커니즘이 거의 동일하다. 둘 다 그냥 k
 
 NordPort 문제(표준 포트가 안 열림, 공인 IP 관리, 방화벽 설정)는 전부 "외부에서 안으로 들어오는 연결을 어떻게 받을까"라는 전제에서 나온다. Cloudflare Tunnel은 이 전제 자체를 뒤집는다.
 
-일반적인 서버는 포트를 열어두고 기다린다(listen). cloudflared는 반대로, 클러스터 안에서 바깥으로 Cloudflare의 가장 가까운 엣지 데이터센터에 연결을 건다(dial). 한 번 걸리면 그 연결은 끊기지 않고 계속 유지되고(persistent), 그 위에 여러 
+일반적인 서버는 포트를 열어두고 기다린다(listen). cloudflared는 반대로, 클러스터 안에서 바깥으로 Cloudflare의 가장 가까운 엣지 데이터센터에 연결을 건다(dial). 한 번 걸리면 그 연결은 끊기지 않고 계속 유지되고(persistent), 그 위에 여러 요청이 동시에 오갈 수 있게 멀티플렉싱된다(QUIC/HTTP2). 이 프로젝트 같은 경우 Pod가 2개 떠있어서 Tunnel Overview에 커넥터가 2줄 보였던 것이 이 아웃바운드 연결이 pod마다 하나씩 독립적으로 열려있기 때문이다.
+
+``` structured text
+Browser --------> Cloudflare ---------> cloudflared -------> ingress-nginx ----->
+```
+
+#### 왜 방화벽 설정이 필요없는가
+
+거의 모든 네트워크는 바깥으로 나가는 연결은 기본적으로 허용하고, 안으로 들어오는 연결만 막는다(그것이 방화벽의 존재 이유이다). cloudflared는 이 비대칭성을 그대로 이용한다.
