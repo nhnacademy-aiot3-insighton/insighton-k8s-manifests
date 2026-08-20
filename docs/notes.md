@@ -35,11 +35,7 @@ StatefulSet은 세 가지를 보장한다.
 Pod IP는 Pod가 재시작될 때마다 바뀐다. Service는 그 위에 절대 안 바뀌는 가상 IP(ClusterIP)를 하나 씌워주는 오브젝트이다. Service를 만들면 `kube-proxy`가 클러스터의 모든 노드에 iptables(또는 IPVS) 규칙을 심어둔다. "ClusterIP 로 오는 패킷의 목적지 주소를, 지금 살아있는 Pod IP 중 하나로 바꿔치기(DNAT) 해라" 라는 규칙이다. 즉, 실제로 트래픽을 전달하는 프록시 프로세스가 어딘가로 떠서 패킷을 중계하는 것이 아니라, 커널 레벨에서 패킷의 목적지 주소 자체가 바뀌는 것임.
 
 ~~~ str
-																	 
-                        패킷 도착	  																	 목적지 재작성
-dst: 10.x (ClusterIP) ---------->				 				Node								------------> dst: 10.244.2.7 (Pod)
-																	(kube-proxy iptables DNAT 규칙 적용) 
-
+dst: 10.x (ClusterIP) ----------> Node ------------> dst: 10.244.2.7 (Pod)
 ~~~
 
 ClusterIP로 향하던 패킷이 노드를 지나며 목적지 주소가 실제 Pod IP로 재작성된다. - 별도 프록시 프로세서가 중계하는 것이 아니라 커널의 netfilter거 하는 일이다.
