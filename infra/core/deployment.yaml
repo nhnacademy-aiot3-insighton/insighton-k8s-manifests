@@ -48,6 +48,16 @@ spec:
                 secretKeyRef:
                   name: insighton-core-secret
                   key: REDIS_PASSWORD
+            - name: TELEMETRY_REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-core-secret
+                  key: TELEMETRY_REDIS_HOST
+            - name: TELEMETRY_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-core-secret
+                  key: TELEMETRY_REDIS_PASSWORD
             - name: RABBITMQ_HOST
               valueFrom:
                 secretKeyRef:

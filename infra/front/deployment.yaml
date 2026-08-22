@@ -25,6 +25,16 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "prod"
+            - name: TELEMETRY_REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-front-secret
+                  key: TELEMETRY_REDIS_HOST
+            - name: TELEMETRY_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-front-secret
+                  key: TELEMETRY_REDIS_PASSWORD
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
