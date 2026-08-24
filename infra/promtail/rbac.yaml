@@ -5,22 +5,24 @@ metadata:
   namespace: insighton-logging
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: Role
 metadata:
-  name: promtail
+  name: promtail-pod-reader
+  namespace: insighton
 rules:
   - apiGroups: [""]
-    resources: ["nodes", "services", "pods"]
-    verbs: ["get", "watch", "list"]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: RoleBinding
 metadata:
-  name: promtail
+  name: promtail-pod-reader
+  namespace: insighton
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: promtail
+  kind: Role
+  name: promtail-pod-reader
 subjects:
   - kind: ServiceAccount
     name: promtail

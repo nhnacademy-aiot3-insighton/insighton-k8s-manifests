@@ -20,8 +20,9 @@ spec:
       containers:
         - name: promtail
           image: grafana/promtail:3.6.11
+          command: ["sh", "-c"]
           args:
-            - -config.file=/etc/promtail/promtail.yaml
+            - "ulimit -n 65536 && exec /usr/bin/promtail -config.file=/etc/promtail/promtail.yaml"
           env:
             - name: HOSTNAME
               valueFrom:
