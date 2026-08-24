@@ -17,6 +17,8 @@ spec:
     spec:
       automountServiceAccountToken: false
       terminationGracePeriodSeconds: 30
+      securityContext:
+        fsGroup: 10001
       containers:
         - name: loki
           image: grafana/loki:3.7.4
