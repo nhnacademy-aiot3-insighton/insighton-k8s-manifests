@@ -20,7 +20,7 @@ spec:
         - name: insighton-ghcr-secret
       containers:
         - name: ruleengine
-          image: ghcr.io/nhnacademy-aiot3-insighton/insighton-ruleengine:cd5a31eb819cbfae8605597cbada11aeb223347a
+          image: ghcr.io/nhnacademy-aiot3-insighton/insighton-ruleengine:97144457455c79d0c1e4a31f26dd8bf868eac945
           ports:
             - containerPort: 8080
           env:
