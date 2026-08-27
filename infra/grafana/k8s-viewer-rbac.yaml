@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: grafana-k8s-viewer
+  namespace: insighton-logging
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grafana-k8s-viewer-token
+  namespace: insighton-logging
+  annotations:
+    kubernetes.io/service-account.name: grafana-k8s-viewer
+type: kubernetes.io/service-account-token
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: grafana-pod-reader
+  namespace: insighton
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: grafana-pod-reader
+  namespace: insighton
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: grafana-pod-reader
+subjects:
+  - kind: ServiceAccount
+    name: grafana-k8s-viewer
+    namespace: insighton-logging

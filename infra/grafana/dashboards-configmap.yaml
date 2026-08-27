@@ -15,7 +15,7 @@ data:
       "editable": true,
       "graphTooltip": 1,
       "refresh": "30s",
-      "time": { "from": "now-15m", "to": "now" },
+      "time": { "from": "now-5m", "to": "now" },
       "annotations": {
         "list": [
           {
@@ -48,8 +48,25 @@ data:
             "name": "pod",
             "type": "query",
             "label": "Pod",
-            "datasource": "Loki",
-            "query": "label_values({namespace=\"insighton\", app=~\"$app\"}, pod)",
+            "datasource": "Kubernetes API",
+            "query": {
+              "queryType": "infinity",
+              "refId": "variable-pod",
+              "meta": { "valueField": "pod", "textField": "pod" },
+              "infinityQuery": {
+                "refId": "variable-pod",
+                "type": "json",
+                "source": "url",
+                "format": "table",
+                "url": "https://kubernetes.default.svc/api/v1/namespaces/insighton/pods",
+                "url_options": {
+                  "method": "GET",
+                  "params": [{ "key": "fieldSelector", "value": "status.phase=Running" }]
+                },
+                "root_selector": "items",
+                "columns": [{ "selector": "metadata.name", "text": "pod", "type": "string" }]
+              }
+            },
             "refresh": 2,
             "multi": true,
             "includeAll": true,
@@ -184,7 +201,7 @@ data:
           "id": 5,
           "type": "table",
           "title": "Active Pods (last 5m)",
-          "gridPos": { "h": 8, "w": 8, "x": 0, "y": 14 },
+          "gridPos": { "h": 8, "w": 24, "x": 0, "y": 14 },
           "datasource": "Loki",
           "fieldConfig": { "defaults": {}, "overrides": [] },
           "transformations": [
@@ -203,7 +220,7 @@ data:
           "id": 6,
           "type": "timeseries",
           "title": "Error Rate by App",
-          "gridPos": { "h": 8, "w": 16, "x": 8, "y": 14 },
+          "gridPos": { "h": 8, "w": 24, "x": 0, "y": 22 },
           "datasource": "Loki",
           "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
           "options": {
@@ -224,7 +241,7 @@ data:
           "id": 7,
           "type": "logs",
           "title": "Live Logs",
-          "gridPos": { "h": 24, "w": 24, "x": 0, "y": 22 },
+          "gridPos": { "h": 30, "w": 24, "x": 0, "y": 30 },
           "datasource": "Loki",
           "options": {
             "showTime": true,
@@ -234,12 +251,115 @@ data:
             "prettifyLogMessage": false,
             "enableLogDetails": true,
             "dedupStrategy": "none",
-            "sortOrder": "Descending"
+            "sortOrder": "Ascending"
           },
           "targets": [
             {
               "datasource": "Loki",
-              "expr": "{namespace=\"insighton\", app=~\"$app\", pod=~\"$pod\"}",
+              "expr": "{namespace=\"insighton\", app=~\"$app\", pod=~\"$pod\"} |~ \"(?i)(warn|error)\"",
+              "queryType": "range",
+              "maxLines": 1000,
+              "refId": "A"
+            }
+          ]
+        }
+      ]
+    }
+  insighton-logs-by-pod.json: |
+    {
+      "uid": "insighton-logs-by-pod",
+      "title": "Insighton - Logs by Pod",
+      "tags": ["loki", "insighton"],
+      "timezone": "browser",
+      "schemaVersion": 39,
+      "version": 1,
+      "editable": true,
+      "graphTooltip": 1,
+      "refresh": "30s",
+      "time": { "from": "now-5m", "to": "now" },
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": { "type": "grafana", "uid": "-- Grafana --" },
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "templating": {
+        "list": [
+          {
+            "name": "app",
+            "type": "query",
+            "label": "App",
+            "datasource": "Loki",
+            "query": "label_values({namespace=\"insighton\"}, app)",
+            "refresh": 2,
+            "multi": true,
+            "includeAll": true,
+            "allValue": ".*",
+            "sort": 1,
+            "current": { "text": "All", "value": "$__all" }
+          },
+          {
+            "name": "pod",
+            "type": "query",
+            "label": "Pod",
+            "datasource": "Kubernetes API",
+            "query": {
+              "queryType": "infinity",
+              "refId": "variable-pod",
+              "meta": { "valueField": "pod", "textField": "pod" },
+              "infinityQuery": {
+                "refId": "variable-pod",
+                "type": "json",
+                "source": "url",
+                "format": "table",
+                "url": "https://kubernetes.default.svc/api/v1/namespaces/insighton/pods",
+                "url_options": {
+                  "method": "GET",
+                  "params": [{ "key": "fieldSelector", "value": "status.phase=Running" }]
+                },
+                "root_selector": "items",
+                "columns": [{ "selector": "metadata.name", "text": "pod", "type": "string" }]
+              }
+            },
+            "refresh": 2,
+            "multi": true,
+            "includeAll": true,
+            "allValue": ".*",
+            "sort": 1,
+            "current": { "text": "All", "value": "$__all" }
+          }
+        ]
+      },
+      "panels": [
+        {
+          "id": 1,
+          "type": "logs",
+          "title": "$pod",
+          "repeat": "pod",
+          "repeatDirection": "v",
+          "gridPos": { "h": 16, "w": 24, "x": 0, "y": 0 },
+          "datasource": "Loki",
+          "options": {
+            "showTime": true,
+            "showLabels": false,
+            "showCommonLabels": false,
+            "wrapLogMessage": true,
+            "prettifyLogMessage": false,
+            "enableLogDetails": true,
+            "dedupStrategy": "none",
+            "sortOrder": "Ascending"
+          },
+          "targets": [
+            {
+              "datasource": "Loki",
+              "expr": "{namespace=\"insighton\", app=~\"$app\", pod=\"$pod\"}",
               "queryType": "range",
               "maxLines": 1000,
               "refId": "A"

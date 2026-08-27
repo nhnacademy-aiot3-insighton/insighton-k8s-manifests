@@ -13,3 +13,14 @@ data:
         url: http://loki.insighton-logging.svc.cluster.local:3100
         isDefault: true
         editable: false
+      - name: Kubernetes API
+        type: yesoreyeram-infinity-datasource
+        access: proxy
+        jsonData:
+          auth_method: bearerToken
+          tlsSkipVerify: true
+          allowedHosts:
+            - https://kubernetes.default.svc
+        secureJsonData:
+          bearerToken: $GRAFANA_K8S_TOKEN
+        editable: false
