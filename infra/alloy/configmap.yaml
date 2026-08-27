@@ -64,7 +64,7 @@ data:
       // down to its own node, mirroring the promtail HOSTNAME trick.
       rule {
         source_labels = ["__meta_kubernetes_pod_node_name"]
-        regex         = env("HOSTNAME")
+        regex         = sys.env("HOSTNAME")
         action        = "keep"
       }
 
