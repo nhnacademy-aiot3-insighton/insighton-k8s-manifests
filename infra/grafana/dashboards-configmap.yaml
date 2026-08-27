@@ -256,7 +256,7 @@ data:
           "targets": [
             {
               "datasource": "Loki",
-              "expr": "{namespace=\"insighton\", app=~\"$app\", pod=~\"$pod\"} |~ \"(?i)(warn|error)\"",
+              "expr": "{namespace=\"insighton\", app=~\"$app\", app=~\"insighton-ruleengine|insighton-core|insighton-ai|insighton-auth|insighton-front|insighton-gateway\", pod=~\"$pod\"} |~ \" (WARN|ERROR) \"",
               "queryType": "range",
               "maxLines": 1000,
               "refId": "A"
