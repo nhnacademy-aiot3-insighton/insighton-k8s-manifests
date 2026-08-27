@@ -35,7 +35,7 @@ data:
             "name": "app",
             "type": "query",
             "label": "App",
-            "datasource": { "type": "loki", "uid": "loki" },
+            "datasource": "Loki",
             "query": "label_values({namespace=\"insighton\"}, app)",
             "refresh": 2,
             "multi": true,
@@ -48,7 +48,7 @@ data:
             "name": "pod",
             "type": "query",
             "label": "Pod",
-            "datasource": { "type": "loki", "uid": "loki" },
+            "datasource": "Loki",
             "query": "label_values({namespace=\"insighton\", app=~\"$app\"}, pod)",
             "refresh": 2,
             "multi": true,
@@ -65,7 +65,7 @@ data:
           "type": "stat",
           "title": "Active Apps (5m)",
           "gridPos": { "h": 6, "w": 8, "x": 0, "y": 0 },
-          "datasource": { "type": "loki", "uid": "loki" },
+          "datasource": "Loki",
           "fieldConfig": {
             "defaults": {
               "unit": "none",
@@ -84,7 +84,7 @@ data:
           },
           "targets": [
             {
-              "datasource": { "type": "loki", "uid": "loki" },
+              "datasource": "Loki",
               "expr": "count(sum by (app) (count_over_time({namespace=\"insighton\"}[5m])))",
               "queryType": "instant",
               "refId": "A"
@@ -96,7 +96,7 @@ data:
           "type": "stat",
           "title": "Log Lines / sec",
           "gridPos": { "h": 6, "w": 8, "x": 8, "y": 0 },
-          "datasource": { "type": "loki", "uid": "loki" },
+          "datasource": "Loki",
           "fieldConfig": {
             "defaults": {
               "unit": "short",
@@ -115,7 +115,7 @@ data:
           },
           "targets": [
             {
-              "datasource": { "type": "loki", "uid": "loki" },
+              "datasource": "Loki",
               "expr": "sum(rate({namespace=\"insighton\", app=~\"$app\"}[$__interval]))",
               "queryType": "instant",
               "refId": "A"
@@ -127,7 +127,7 @@ data:
           "type": "stat",
           "title": "Errors (5m)",
           "gridPos": { "h": 6, "w": 8, "x": 16, "y": 0 },
-          "datasource": { "type": "loki", "uid": "loki" },
+          "datasource": "Loki",
           "fieldConfig": {
             "defaults": {
               "unit": "none",
@@ -152,7 +152,7 @@ data:
           },
           "targets": [
             {
-              "datasource": { "type": "loki", "uid": "loki" },
+              "datasource": "Loki",
               "expr": "sum(count_over_time({namespace=\"insighton\", app=~\"$app\"} |~ \"(?i)error|exception|panic\" [5m]))",
               "queryType": "instant",
               "refId": "A"
@@ -164,7 +164,7 @@ data:
           "type": "timeseries",
           "title": "Log Rate by App",
           "gridPos": { "h": 8, "w": 24, "x": 0, "y": 6 },
-          "datasource": { "type": "loki", "uid": "loki" },
+          "datasource": "Loki",
           "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
           "options": {
             "legend": { "showLegend": true, "displayMode": "table", "placement": "bottom", "calcs": ["mean", "max"] },
@@ -172,7 +172,7 @@ data:
           },
           "targets": [
             {
-              "datasource": { "type": "loki", "uid": "loki" },
+              "datasource": "Loki",
               "expr": "sum by (app) (rate({namespace=\"insighton\", app=~\"$app\"}[$__interval]))",
               "legendFormat": "{{app}}",
               "queryType": "range",
@@ -185,14 +185,14 @@ data:
           "type": "table",
           "title": "Active Pods (last 5m)",
           "gridPos": { "h": 8, "w": 8, "x": 0, "y": 14 },
-          "datasource": { "type": "loki", "uid": "loki" },
+          "datasource": "Loki",
           "fieldConfig": { "defaults": {}, "overrides": [] },
           "transformations": [
             { "id": "organize", "options": { "renameByName": { "Value": "Log Lines (5m)" } } }
           ],
           "targets": [
             {
-              "datasource": { "type": "loki", "uid": "loki" },
+              "datasource": "Loki",
               "expr": "topk(20, sum by (app, pod) (count_over_time({namespace=\"insighton\", app=~\"$app\"}[5m])))",
               "queryType": "instant",
               "refId": "A"
@@ -204,7 +204,7 @@ data:
           "type": "timeseries",
           "title": "Error Rate by App",
           "gridPos": { "h": 8, "w": 16, "x": 8, "y": 14 },
-          "datasource": { "type": "loki", "uid": "loki" },
+          "datasource": "Loki",
           "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
           "options": {
             "legend": { "showLegend": true, "displayMode": "table", "placement": "bottom", "calcs": ["mean", "max"] },
@@ -212,7 +212,7 @@ data:
           },
           "targets": [
             {
-              "datasource": { "type": "loki", "uid": "loki" },
+              "datasource": "Loki",
               "expr": "sum by (app) (rate({namespace=\"insighton\", app=~\"$app\"} |~ \"(?i)error|exception|panic\" [$__interval]))",
               "legendFormat": "{{app}}",
               "queryType": "range",
@@ -225,7 +225,7 @@ data:
           "type": "logs",
           "title": "Live Logs",
           "gridPos": { "h": 24, "w": 24, "x": 0, "y": 22 },
-          "datasource": { "type": "loki", "uid": "loki" },
+          "datasource": "Loki",
           "options": {
             "showTime": true,
             "showLabels": false,
@@ -238,7 +238,7 @@ data:
           },
           "targets": [
             {
-              "datasource": { "type": "loki", "uid": "loki" },
+              "datasource": "Loki",
               "expr": "{namespace=\"insighton\", app=~\"$app\", pod=~\"$pod\"}",
               "queryType": "range",
               "maxLines": 1000,
