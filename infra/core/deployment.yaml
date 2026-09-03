@@ -83,6 +83,11 @@ spec:
                 secretKeyRef:
                   name: insighton-core-secret
                   key: AIR_KEY
+            - name: KMA_MIDTERM_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: insighton-core-secret
+                  key: KMA_MIDTERM_KEY
           startupProbe:
             httpGet:
               path: /actuator/health/liveness
