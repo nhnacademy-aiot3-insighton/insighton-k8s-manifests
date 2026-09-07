@@ -38,6 +38,13 @@ spec:
                 name: insighton-gateway
                 port:
                   number: 80
+          - path: /webjars
+            pathType: Prefix
+            backend:
+              service:
+                name: insighton-gateway
+                port:
+                  number: 80
           - path: /auth/v3/api-docs
             pathType: Prefix
             backend:
@@ -84,6 +91,13 @@ spec:
                 port:
                   number: 80
           - path: /swagger
+            pathType: Prefix
+            backend:
+              service:
+                name: insighton-gateway
+                port:
+                  number: 80
+          - path: /webjars
             pathType: Prefix
             backend:
               service:
