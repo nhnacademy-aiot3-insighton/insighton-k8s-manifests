@@ -31,6 +31,41 @@ spec:
                 name: insighton-gateway
                 port:
                   number: 80
+          - path: /swagger
+            pathType: Prefix
+            backend:
+              service:
+                name: insighton-gateway
+                port:
+                  number: 80
+          - path: /auth/v3/api-docs
+            pathType: Prefix
+            backend:
+              service:
+                name: insighton-gateway
+                port:
+                  number: 80
+          - path: /core/v3/api-docs
+            pathType: Prefix
+            backend:
+              service:
+                name: insighton-gateway
+                port:
+                  number: 80
+          - path: /ai/v3/api-docs
+            pathType: Prefix
+            backend:
+              service:
+                name: insighton-gateway
+                port:
+                  number: 80
+          - path: /engine/v3/api-docs
+            pathType: Prefix
+            backend:
+              service:
+                name: insighton-gateway
+                port:
+                  number: 80
           - path: /
             pathType: Prefix
             backend:
@@ -42,6 +77,41 @@ spec:
       http:
         paths:
           - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: insighton-gateway
+                port:
+                  number: 80
+          - path: /swagger
+            pathType: Prefix
+            backend:
+              service:
+                name: insighton-gateway
+                port:
+                  number: 80
+          - path: /auth/v3/api-docs
+            pathType: Prefix
+            backend:
+              service:
+                name: insighton-gateway
+                port:
+                  number: 80
+          - path: /core/v3/api-docs
+            pathType: Prefix
+            backend:
+              service:
+                name: insighton-gateway
+                port:
+                  number: 80
+          - path: /ai/v3/api-docs
+            pathType: Prefix
+            backend:
+              service:
+                name: insighton-gateway
+                port:
+                  number: 80
+          - path: /engine/v3/api-docs
             pathType: Prefix
             backend:
               service:
