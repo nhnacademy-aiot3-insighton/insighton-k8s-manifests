@@ -19,7 +19,7 @@ spec:
         - name: insighton-ghcr-secret
       containers:
         - name: front
-          image: ghcr.io/nhnacademy-aiot3-insighton/insighton-front:ddba1fce5be034a220cae08caac41c4a1f8fcbf8
+          image: ghcr.io/nhnacademy-aiot3-insighton/insighton-front:c676c012e41182e4d4f4fd527f0994a8ec534fe5
           ports:
             - containerPort: 8080
           env:
